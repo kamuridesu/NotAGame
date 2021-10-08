@@ -46,5 +46,5 @@ if __name__ == "__main__":
             c = kb.getch()
             #if ord(c) == 27:
             #    break
-            save(ord(c))
-            # print(ord(c))
+            #save(ord(c))
+            print(ord(c))
