@@ -21,6 +21,15 @@ class CoordinateX:
             self.x_coord_list.remove(self.char)
         self.x_coord = self.updateCoordLen()
 
+    def __eq__(self, o: object) -> bool:
+        if self.x_coord == o.x_coord:
+            if len(self.x_coord_list) == len(o.x_coord_list):
+                return True
+        return False
+
+    def __str__(self):
+        return str(self.x_coord)
+
 
 class CoordinateY:
     def __init__(self, char) -> None:
@@ -44,3 +53,12 @@ class CoordinateY:
         if self.y_coord_list and value <= self.y_coord:
             self.y_coord_list.remove(self.char)
         self.y_coord = self.updateCoordLen()
+    
+    def __eq__(self, o: object) -> bool:
+        if self.y_coord == o.y_coord:
+            if len(self.y_coord_list) == len(o.y_coord_list):
+                return True
+        return False
+    
+    def __str__(self):
+        return str(self.y_coord)
