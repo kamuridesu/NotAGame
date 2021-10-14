@@ -8,12 +8,18 @@ class CoordinateX:
         self.x_coord = len(self.x_coord_list)
         return len(self.x_coord_list)
 
+    def clear(self):
+        self.x_coord_list = []
+        self.updateCoordLen()
+
     def __add__(self, value):
-        if self.x_coord_list:
-            for x in range(value):
-                self.x_coord_list.append(self.char)
-        else:
+        for x in range(value):
             self.x_coord_list.append(self.char)
+        # if self.x_coord_list:
+        #     for x in range(value):
+        #         self.x_coord_list.append(self.char)
+        # else:
+        #     self.x_coord_list.append(self.char)
         self.x_coord = self.updateCoordLen()
 
     def __sub__(self, value):
@@ -40,14 +46,20 @@ class CoordinateY:
     def updateCoordLen(self):
         self.y_coord = len(self.y_coord_list)
         return len(self.y_coord_list)
+    
+    def clear(self):
+        self.y_coord_list = []
+        self.updateCoordLen()
 
     def __add__(self, value):
-        if self.y_coord_list:
-            for x in range(value):
-                self.y_coord_list.append(self.char)
-        else:
+        for x in range(value):
             self.y_coord_list.append(self.char)
-        self.y_coord = self.updateCoordLen()
+        # if self.y_coord_list:
+        #     for x in range(value):
+        #         self.y_coord_list.append(self.char)
+        # else:
+        #     self.y_coord_list.append(self.char)
+        # self.y_coord = self.updateCoordLen()
 
     def __sub__(self, value):
         if self.y_coord_list and value <= self.y_coord:

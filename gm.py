@@ -8,6 +8,12 @@ from coordinates import CoordinateX, CoordinateY
 from input import Keyboard
 
 
+def saveLog(**obj):
+    obj = str(obj)
+    with open("log.txt", "a") as f:
+        f.write(obj + "\n")
+
+
 class Player:
     def __init__(self) -> None:
         self.sprite = "x"
@@ -23,6 +29,9 @@ class Player:
         self.player_state = state
         return state
 
+    def getCoords(self):
+        return [self.x_coord.x_coord, self.y_coord.y_coord]
+
 
 class Enemy:
     def __init__(self) -> None:
@@ -32,16 +41,23 @@ class Enemy:
         self.enemy_state = ""
 
     def updateEnemyState(self, terminal_size):
+        self.x_coord.clear()
+        self.y_coord.clear()
         x = random.randint(0, terminal_size[1])
         self.x_coord + x
         y = random.randint(0, terminal_size[0])
         self.y_coord + y
+        saveLog(x=x, y=y)
+        saveLog(enemyx=self.x_coord.x_coord, enemyy=self.y_coord.y_coord)
         state = ""
         state += "".join(self.y_coord.y_coord_list)
         state += "".join(self.x_coord.x_coord_list)
         state += self.sprite
         self.enemy_state = state
         return state
+    
+    def getCoords(self):
+        return [self.x_coord.x_coord, self.y_coord.y_coord]
 
 
 class Test:
@@ -53,15 +69,11 @@ class Test:
 
     def draw(self, obj, clear_time=0.000016):
         print(obj, end="", flush=True)
-        sp.call("clear", shell=True)
         time.sleep(clear_time)
+        sp.call("clear", shell=True)
 
-    def checkGameOver(self):
-        self.draw(str(self.player.y_coord) + "\n" + str(self.enemy.y_coord))
-        if self.player.y_coord == self.enemy.y_coord:
-            if self.player.x_coord == self.enemy.x_coord:
-                return True
-        return False
+    def checkIfScore(self):
+        return  self.player.y_coord == self.enemy.y_coord and self.player.x_coord == self.enemy.x_coord
 
     def getTerminalSize(self):
         self.terminal_size = [os.get_terminal_size().columns, os.get_terminal_size().lines]
@@ -80,6 +92,7 @@ class Test:
 
     def mainLoop(self):
         self.enemy.updateEnemyState(self.terminal_size)
+        clear_time = 0.16
         while True:
             self.getTerminalSize()
             up, down, left, right = [False for i in range(4)]
@@ -94,10 +107,14 @@ class Test:
                 if ord(key) == 100: # d
                     right = True
             self.move(up, down, left, right)
-            self.draw(self.player.player_state)
-            self.draw(self.enemy.enemy_state)
-            if self.checkGameOver():
-                break
+            self.draw(self.player.player_state, clear_time=clear_time)
+            self.draw(self.enemy.enemy_state, clear_time=clear_time)
+            if self.checkIfScore():
+                self.enemy.updateEnemyState(self.terminal_size)
+            content = "\t\t" + str(self.terminal_size) + "\n\t\t" + str(self.player.getCoords()) + "\n\t\t" + str(self.enemy.getCoords())
+            self.draw(content, clear_time=clear_time)
+            # self.draw("\n" + str(self.player.getCoords()) + "\n" + str(self.enemy.getCoords()), clear_time=clear_time)
+            self.enemy.updateEnemyState(self.terminal_size)
         sp.call("clear", shell=True)
         print("Encerrado!")
 
