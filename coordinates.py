@@ -15,11 +15,6 @@ class CoordinateX:
     def __add__(self, value):
         for x in range(value):
             self.x_coord_list.append(self.char)
-        # if self.x_coord_list:
-        #     for x in range(value):
-        #         self.x_coord_list.append(self.char)
-        # else:
-        #     self.x_coord_list.append(self.char)
         self.x_coord = self.updateCoordLen()
 
     def __sub__(self, value):
@@ -54,12 +49,7 @@ class CoordinateY:
     def __add__(self, value):
         for x in range(value):
             self.y_coord_list.append(self.char)
-        # if self.y_coord_list:
-        #     for x in range(value):
-        #         self.y_coord_list.append(self.char)
-        # else:
-        #     self.y_coord_list.append(self.char)
-        # self.y_coord = self.updateCoordLen()
+        self.x_coord = self.updateCoordLen()
 
     def __sub__(self, value):
         if self.y_coord_list and value <= self.y_coord:
