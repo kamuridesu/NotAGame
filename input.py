@@ -6,19 +6,19 @@ from select import select
 
 class Keyboard:
     def __init__(self) -> None:
-        self.fd = sys.stdin.fileno()
-        self.new_term = termios.tcgetattr(self.fd)
-        self.old_term = termios.tcgetattr(self.fd)
+        self.fd: int = sys.stdin.fileno()
+        self.new_term: list = termios.tcgetattr(self.fd)
+        self.old_term: list = termios.tcgetattr(self.fd)
 
         self.new_term[3] = (self.new_term[3] & ~termios.ICANON & ~termios.ECHO)
         termios.tcsetattr(self.fd, termios.TCSAFLUSH, self.new_term)
 
         atexit.register(self.setNormalTerm)
     
-    def setNormalTerm(self):
+    def setNormalTerm(self) -> None:
         termios.tcsetattr(self.fd, termios.TCSAFLUSH, self.old_term)
     
-    def getch(self):
+    def getch(self) -> str:
         key = sys.stdin.read(1)
         return key
 
@@ -29,15 +29,16 @@ class Keyboard:
         if ord(inp) in vals:
             return vals.index(ord(inp))
     
-    def hit(self):
+    def hit(self) -> tuple:
         return select([sys.stdin], [], [], 0)[0] != []
 
 
-
-def save(content):
+def save(content) -> None:
     content = str(content)
     with open("file.txt", "w") as f:
         f.write(content)
+
+
 if __name__ == "__main__":
     kb = Keyboard()
     print("esc to stop")
