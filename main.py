@@ -1,6 +1,7 @@
 import time
 import subprocess as sp
 import os
+import sys
 
 from input import Keyboard
 from Scores import HiScores
@@ -15,9 +16,10 @@ def saveLog(**obj):
 
 
 class Test:
-    def __init__(self, name: str="") -> None:
+    def __init__(self, name: str="", speed: int=100) -> None:
         if name == "":
             name = "Guest"
+        self.speed = (0.00016 * speed) / 100
         self.playername: str = name
         self.player: Player = Player()
         self.enemy: Enemy = Enemy()
@@ -26,7 +28,9 @@ class Test:
         self.terminal_size: list = self.getTerminalSize()
         self.score: int = 0
 
-    def draw(self, obj, clear_time: float=0.00016) -> None:
+    def draw(self, obj, clear_time: float=0) -> None:
+        if clear_time == 0:
+            clear_time = self.speed
         print(obj, end="", flush=True)
         time.sleep(clear_time)
         sp.call("clear", shell=True)
@@ -81,14 +85,37 @@ class Test:
         except KeyboardInterrupt:
             sp.call("clear", shell=True)
             self.scoreLog.saveScore(self.playername, self.score)
-            print("Encerrado!")
-            print("Hi-Score".center(20, "-"))
-            print(self.scoreLog)
+            print("Encerrado!".center(self.terminal_size[0]))
+            print("Hi-Score".center(self.terminal_size[0], "-"))
+            print()
+            print("".join([x.center(self.terminal_size[0]) for x in self.scoreLog.output().split("\n")]))
+            print("-".center(self.terminal_size[0], "-"))
 
+
+def argparser(args=sys.argv[1:]):
+    if args:
+        if "-s" in args or "--speed" in args:
+            if len(args) > 1:
+                try:
+                    x = int(args[1])
+                    return x
+                except ValueError:
+                    return 100
+            else:
+                print("Erro! Valor invalido!")
+                raise SystemExit
+        else:
+            print("Erro! Flag não encontrada!")
+            raise SystemExit
+    return 100
 
 
 if __name__ == "__main__":
-    print("Use WASD para mover!")
-    test = Test(input("Insira seu nome e aperte ENTER para iniciar: "))
+    v = argparser()
+    try:
+        print("Use WASD para mover!")
+        test = Test(input("Insira seu nome e aperte ENTER para iniciar: "), speed=v)
+    except KeyboardInterrupt:
+        print("Encerrado pelo usuario!")
+        raise SystemExit
     test.mainLoop()
-    test.getTerminalSize()
