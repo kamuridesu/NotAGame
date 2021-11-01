@@ -1,4 +1,4 @@
 FROM python:3
 WORKDIR /usr/src/app
 COPY . .
-CMD ["python", "./gm.py"]
+CMD ["python", "./main.py"]
