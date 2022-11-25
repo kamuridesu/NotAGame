@@ -5,7 +5,7 @@ from select import select
 WINDOWS = False
 try:
     import msvcrt
-    windows = True
+    WINDOWS = True
 except ImportError:
     WINDOWS=False
 
