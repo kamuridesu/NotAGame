@@ -1,5 +1,8 @@
 import sys
-import termios
+try:
+    import termios
+except ImportError:
+    ...
 import atexit
 from select import select
 WINDOWS = False
